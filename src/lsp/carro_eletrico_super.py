@@ -32,3 +32,14 @@ carro_eletrico = CarroEletrico()
 carro_eletrico.acelerar()
 carro_eletrico.acelerar()
 print(carro_eletrico.velocidade)
+
+
+# O problema que o super() resolve
+# A gente já viu que CarroEletrico precisou reescrever self.velocidade += 10 manualmente,
+# porque sobrescrever substitui o método inteiro.
+# Isso funciona, mas tem um risco: e se a classe mãe Carro um dia mudar a regra 
+# por exemplo, acelerar() passar a somar 15 em vez de 10?
+# A gente teria que lembrar de ir em cada subclasse e atualizar manualmente. Fácil esquecer, fácil gerar bug.
+#
+# O super() resolve isso: em vez de reescrever o comportamento da classe mãe, 
+# a gente chama o método da classe mãe de dentro do método da filha, e só adiciona o que for novo.
