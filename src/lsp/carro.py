@@ -1,4 +1,7 @@
 # ===============================================
+# 01 - Define o contrato
+# promete: acelerar() sempre soma 10
+#
 # Começamos com a classe Carro. Sem herança ainda.
 #================================================
 
