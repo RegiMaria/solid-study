@@ -1,3 +1,9 @@
+# =====================================
+# 02 - Cumpre o contrato
+# Classe derivada
+# sobrescreve mas mantém a promessa
+# ======================================
+
 from carro import Carro
 
 class CarroEletrico(Carro):
