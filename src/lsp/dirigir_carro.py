@@ -1,3 +1,19 @@
+# =====================================
+# 05 - O código cliente (versão reduzida)
+# Confia no contrato: dirigir(carro) assume que a promessa é
+# verdadeira (acelerar() sempre soma 10), sem checar qual
+# subclasse recebeu.
+#
+# Aqui usamos só duas classes pra ver o "exame único" funcionando:
+# - Carro:          define o contrato (promete)
+# - CarroQuebrado:  quebra o contrato
+#
+# O importante: dirigir() é escrita UMA ÚNICA VEZ. Não muda nada
+# dentro dela dependendo de qual carro chega -- é isso que simula
+# a ideia de "código cliente que confia no contrato, sem saber
+# qual subtipo específico está recebendo".
+# ======================================
+
 from carro import Carro
 from carro_quebrado import CarroQuebrado
 from carro_eletrico import CarroEletrico
