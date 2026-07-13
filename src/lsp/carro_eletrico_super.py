@@ -23,12 +23,12 @@ from carro import Carro
 #       print("Acelerando em silêncio (motor elétrico)...")
 
 # COM super() - reaproveita o comportamento da classe mãe
-class CarroEletrico(Carro):
+class CarroEletricoSuper(Carro):
     def acelerar(self):
         super().acelerar()  # chama o acelerar() de Carro, que faz self.velocidade += 10
         print("Acelerando em silêncio (motor elétrico)...")
 
-carro_eletrico = CarroEletrico()  
+carro_eletrico = CarroEletricoSuper()  
 carro_eletrico.acelerar()
 carro_eletrico.acelerar()
 print(carro_eletrico.velocidade)
