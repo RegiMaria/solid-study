@@ -28,3 +28,9 @@ if __name__ == "__main__":
     dirigir(CarroQuebrado())       # quebra o contrato  -> velocidade final: 0
     dirigir(CarroEletrico())       # cumpre o contrato -> velocidade final: 30
     dirigir(CarroEletricoSuper())  # cumpre o contrato -> velocidade final: 30
+
+# Todo carro sabe fazer acelerar(), e isso vai aumentar a velocidade.
+# O dirigir.py faz isso: ele pega a mesma função, escrita uma única vez,
+# e passa os quatro objetos diferentes pra ela, sem alterar nada dentro da função.
+# É isso que prova (ou desmente) o LSP na prática porque simula exatamente a situação real:
+# código genérico que recebe "um carro qualquer" sem saber de antemão qual subtipo é.
