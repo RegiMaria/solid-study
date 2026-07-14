@@ -27,48 +27,67 @@ pode gerar bug sério e silencioso).
 
 ## Progresso até agora
 
-- [x] Criada a classe base `Carro`, **sem herança ainda**. Só pra
-      entender bem os fundamentos antes de introduzir o problema:
-      classe, `__init__`, `self`, método, instanciação.
-- [ ] Criar `CarroQuebrado(Carro)` — subclasse que viola o contrato
-      de `Carro` (não altera a velocidade ao acelerar).
-- [ ] Escrever `dirigir(carro)` — função "cliente" que confia no
-      contrato de `Carro`, pra mostrar onde a violação quebra o código.
-- [ ] Rodar os dois casos lado a lado e comparar o resultado.
-- [ ] Repetir a ideia no exemplo mais avançado (`lsp_api/`), com
-      gateways de pagamento.
+- [x] `carro.py` — classe base `Carro`, sem herança ainda. Fundamentos:
+      classe, `__init__`, `self`, atributo, método, instanciação.
+- [x] `carro.py` — corrigido vazamento de execução ao importar o módulo,
+      usando `if __name__ == "__main__":`.
+- [x] `carro_quebrado.py` — subclasse `CarroQuebrado(Carro)` que
+      **viola** o contrato de `Carro` (sobrescreve `acelerar()` sem
+      manter a promessa: velocidade nunca aumenta).
+- [x] `carro_eletrico.py` — subclasse `CarroEletrico(Carro)` que
+      sobrescreve `acelerar()` mas **cumpre** o contrato (reescreve
+      `self.velocidade += 10` manualmente, só acrescenta um efeito
+      colateral cosmético).
+- [x] `carro_eletrico_super.py` — mesma ideia, mas reaproveitando o
+      comportamento da classe mãe com `super().acelerar()` em vez de
+      duplicar a lógica.
+- [x] `dirigir_carro.py` — função cliente `dirigir(carro)`, escrita uma
+      única vez, testada contra `Carro` e `CarroQuebrado` para provar
+      o LSP na prática (mesma função, subtipos diferentes).
+- [ ] Estender `dirigir_carro.py` para incluir `CarroEletrico` e
+      `CarroEletricoSuper` na mesma bateria de testes.
+- [ ] **Migrar o estudo para o exemplo mais realista em `lsp_api/`**
+      (gateways de pagamento).
 
-## Estado atual do código (`carro.py`)
+## Os scripts do exemplo Carro, em ordem
 
-```python
-# ===============================================
-# Começamos com a classe Carro. Sem herança ainda.
-# ===============================================
+| Arquivo | Papel | Cumpre o contrato? |
+|---|---|---|
+| `carro.py` | Define o contrato (classe base) | — |
+| `carro_quebrado.py` | Sobrescreve `acelerar()` e quebra a promessa | Não |
+| `carro_eletrico.py` | Sobrescreve `acelerar()` reescrevendo a lógica original | Sim |
+| `carro_eletrico_super.py` | Sobrescreve `acelerar()` reaproveitando com `super()` | Sim |
+| `dirigir_carro.py` | Código cliente: confia no contrato, sem saber qual subtipo recebeu | — |
 
-class Carro:
-    def __init__(self):
-        self.velocidade = 0
+## Conceitos consolidados nesta etapa
 
-    def acelerar(self):
-        self.velocidade += 10
-
-# Instanciando: cria um carro de verdade a partir da "receita" Carro.
-# Nesse momento o Python roda o __init__ automaticamente,
-# e meu_carro nasce com velocidade = 0.
-meu_carro = Carro()
-# print(meu_carro.velocidade)  # descomente pra ver que começa em 0
-
-# Cada chamada de acelerar() soma 10 à velocidade DESTE carro (self = meu_carro)
-meu_carro.acelerar()  # velocidade: 0 -> 10
-meu_carro.acelerar()  # velocidade: 10 -> 20
-meu_carro.acelerar()  # velocidade: 20 -> 30
-
-print(meu_carro.velocidade)  # deve imprimir 30
-```
+- **Contrato implícito / pós-condição**: o que um método promete que
+  será verdade depois de executado (`acelerar()` sempre soma 10 à
+  velocidade).
+- **Sobrescrever ≠ violar o LSP**: reescrever um método (`override`) é
+  normal e permitido. O problema é reescrever de um jeito que quebra a
+  promessa original da classe base.
+- **Tipos de violação de LSP**:
+  1. Quebra de pós-condição (o que aconteceu com `CarroQuebrado`)
+  2. Fortalecimento de pré-condição (subclasse passa a exigir mais do
+     que a classe mãe exigia)
+  3. Quebra de invariante (uma regra que deveria valer sempre)
+- **`if __name__ == "__main__":`**: evita que código de teste "solto"
+  num módulo rode acidentalmente quando esse módulo é importado por
+  outro arquivo.
+- **`super()`**: função nativa do Python que devolve um objeto-ponte
+  para a classe mãe, permitindo chamar o método original (não
+  sobrescrito) de dentro da subclasse — evita duplicar lógica.
+- **Papéis num cenário de LSP**:
+  - quem **define** o contrato → a classe base (`Carro`)
+  - quem **cumpre/quebra** o contrato → as subclasses
+  - quem **confia** no contrato → o código cliente (`dirigir`)
 
 ## Próximo passo
 
-Criar `carro_quebrado.py`, com uma classe `CarroQuebrado(Carro)` que
-sobrescreve `acelerar()` de um jeito que quebra a promessa da classe
-base e ver na prática por que isso é um problema de design, não só
-um "bug".
+Migrar o estudo para `lsp_api/`, um exemplo mais próximo do mundo real:
+gateways de pagamento (`StripeGateway`, `PaypalGateway`) que respeitam
+um contrato comum, e um `FakeGateway` que o viola — mostrando como o
+mesmo problema do `CarroQuebrado` aparece em código profissional, com
+consequências mais sérias (erro silencioso em processamento de
+pagamento).
