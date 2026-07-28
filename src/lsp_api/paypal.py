@@ -14,3 +14,9 @@ class PaypalGateway(PaymentGateway):
         print(f"[PayPal] Redirecionando pagamento de R$ {amount:.2f}...")
         transaction_id = f"pp_{uuid.uuid4().hex[:8]}"
         return {"success": True, "transaction_id": transaction_id}
+
+# Blocco de teste
+if __name__ == "__main__":
+    gateway = PaypalGateway()
+    resultado = gateway.pay(300.0)
+    print(resultado)
