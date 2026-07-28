@@ -15,3 +15,9 @@ class StripeGateway(PaymentGateway):
         # caracteres -- só pra deixar o id mais curto e legível.
         transaction_id = f"stripe_{uuid.uuid4().hex[:8]}"
         return {"success": True, "transaction_id": transaction_id}
+
+
+if __name__ == "__main__":
+    gateway = StripeGateway()
+    resultado = gateway.pay(150.0)
+    print(resultado)
