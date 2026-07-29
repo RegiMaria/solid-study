@@ -1,3 +1,11 @@
+# =====================================
+# Código cliente: função escrita confiando SÓ no contrato de
+# PaymentGateway, sem saber (nem se importar) qual implementação
+# concreta vai receber. É exatamente isso que o LSP promete
+# permitir -- e é exatamente isso que quebra quando o contrato
+# é violado.
+# ======================================
+
 from payment_gateway import PaymentGateway
 from stripe import StripeGateway
 from paypal import PaypalGateway
@@ -27,3 +35,7 @@ if __name__ == "__main__":
     # Gateway que VIOLA o contrato --> quebra o código cliente
     processar_pagamento(FakeGateway(), 150.0)   # KeyError escondido pelo try/except
     processar_pagamento(FakeGateway(), 1500.0)  # exceção que ninguém esperava
+
+# processar_pagamento nunca mudou entre um teste e outro.
+# é a mesma função, recebendo objetos diferentes.
+# Isso é o LSP sendo demonstrado na prática, do início ao fim. :D
