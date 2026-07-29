@@ -16,3 +16,14 @@ def processar_pagamento(gateway, amount):
             print("Pagamento recusado.")
     except Exception as e:
         print(f"ERRO INESPERADO: {e}")
+
+# Bloco de testes
+
+if __name__ == "__main__":
+    # Gateways que RESPEITAM o contrato --> funcionam sem drama
+    processar_pagamento(StripeGateway(), 150.0)
+    processar_pagamento(PaypalGateway(), 300.0)
+
+    # Gateway que VIOLA o contrato --> quebra o código cliente
+    processar_pagamento(FakeGateway(), 150.0)   # KeyError escondido pelo try/except
+    processar_pagamento(FakeGateway(), 1500.0)  # exceção que ninguém esperava
