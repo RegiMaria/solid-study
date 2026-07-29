@@ -11,3 +11,14 @@ class FakeGateway(PaymentGateway):
         print(f"[FakeGateway] fingindo processar R$ {amount:.2f}...")
         # Formato de retorno diferente do prometido pelo contrato
         return {"ok": True}
+
+if __name__ == "__main__":
+    gateway = FakeGateway()
+
+    resultado = gateway.pay(150.0)
+    print(resultado)  # {'ok': True} -- formato diferente do esperado
+
+    try:
+        gateway.pay(1500.0)
+    except RuntimeError as erro:
+        print(f"Erro inesperado: {erro}")
